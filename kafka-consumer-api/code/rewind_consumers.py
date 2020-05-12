@@ -16,8 +16,8 @@ cfg = {
 topic1, topic2 = get_topic()
 C = Consumer(cfg)
 partition_topic_offsets = [
-    TopicPartition(topic1, partition=1, offset=5),
-    TopicPartition(topic2, partition=3, offset=0),
+    TopicPartition(topic1, partition=0, offset=5),
+    TopicPartition(topic2, partition=0, offset=0),
     ]
 C.commit(offsets=partition_topic_offsets, async=False)
 C.close()
