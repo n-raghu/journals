@@ -1,0 +1,31 @@
+version: "3.6"
+
+networks:
+    t69:
+        name: t69
+
+services:
+    publisher:
+        command: python waker.py
+        container_name: kon_publisher
+        hostname: host_publisher
+        image: diagnosekafka:alpha
+        volumes:
+            - /ims/r1.4/topic69:/apache/t69
+        networks:
+            - t69
+        build:
+            context: .
+            dockerfile: dfile
+
+    subscriber:
+        command: python waker.py
+        container_name: kon_subscriber
+        hostname: host_subscriber
+        image: diagnosekafka:alpha
+        networks: 
+            - t69
+        depends_on:
+            - publisher
+        volumes:
+            - /ims/r1.4/topic69:/apache/t69
