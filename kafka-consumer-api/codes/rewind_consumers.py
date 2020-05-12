@@ -9,24 +9,25 @@ from essentials import delivery_report
 
 cfg = {
     'bootstrap.servers': get_kafka_ins(),
-    'group.id': f'{get_topic()}-1x',
+    'group.id': 'jt-consumer-1x',
     'auto.offset.reset': 'earliest',
 }
 
+topic1, topic2 = get_topic()
 C = Consumer(cfg)
 partition_topic_offsets = [
-    TopicPartition('kafka-topic-1', partition=1, offset=5),
-    TopicPartition('kafka-topic-2', partition=3, offset=0),
+    TopicPartition(topic1, partition=1, offset=5),
+    TopicPartition(topic2, partition=3, offset=0),
     ]
 C.commit(offsets=partition_topic_offsets, async=False)
 C.close()
 
 C = Consumer(cfg)
-C.subscribe(['kafka-topic-1', 'kafka-topic-2', ])
+C.subscribe([topic1, topic2])
 
 no_msg_counter = 0
 while True:
-    msg = C.poll(0.05)
+    msg = C.poll(0.5)
     if msg:
         no_msg_counter = 0
         print(

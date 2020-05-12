@@ -11,7 +11,7 @@ services:
         hostname: host_publisher
         image: diagnosekafka:alpha
         volumes:
-            - /ims/r1.4/topic69:/apache/t69
+            - /journals/consumer-api:/apache/t69
         networks:
             - t69
         build:
@@ -28,4 +28,4 @@ services:
         depends_on:
             - publisher
         volumes:
-            - /ims/r1.4/topic69:/apache/t69
+            - /journals/consumer-api:/apache/t69
