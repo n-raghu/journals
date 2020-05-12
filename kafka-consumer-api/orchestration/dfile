@@ -5,6 +5,5 @@ RUN pip install --upgrade pip
 RUN mkdir /apache
 ADD waker.py /apache/
 RUN pip install bson
-RUN pip install msgpack
 RUN pip install confluent_kafka
 WORKDIR /apache
