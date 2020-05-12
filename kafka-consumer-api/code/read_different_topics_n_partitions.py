@@ -1,16 +1,19 @@
 from confluent_kafka import Consumer, TopicPartition
 
+from essentials import get_topic, get_kafka_ins
+
 cfg = {
-    'bootstrap.servers': '172.16.18.187:9092',
-    'group.id': 'hb-events-1',
+    'bootstrap.servers': get_kafka_ins(),
+    'group.id': 'jt-consumer-1x',
     'auto.offset.reset': 'earliest',
 }
+topic1, topic2 = get_topic()
 
 C = Consumer(cfg)
 C.assign(
     [
-        TopicPartition(topic='kafka-topic-1', partition=1, offset=6),
-        TopicPartition(topic='kafka-topic-2', partition=3, offset=5),
+        TopicPartition(topic=topic1, partition=0, offset=6),
+        TopicPartition(topic=topic2, partition=0, offset=5),
     ]
 )
 
