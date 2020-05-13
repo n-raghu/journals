@@ -13,12 +13,10 @@ services:
     image: obsidiandynamics/kafdrop
     hostname: kafboard
     container_name: kafboard
-    depends_on:
-      - kafkabroker
     ports:
       - "9099:9000"
     environment:
-      KAFKA_BROKERCONNECT: 172.36.99.9:9092
+      KAFKA_BROKERCONNECT: 192.168.206.207:9092
     networks:
       jti:
         ipv4_address: 172.36.99.11
