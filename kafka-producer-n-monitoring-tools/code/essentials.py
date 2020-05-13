@@ -25,8 +25,8 @@ def decode_dtm(obj):
 
 
 def get_kafka_ins():
-    return '172.16.18.187:9092'
+    return '192.168.206.207:9092'
 
 
 def get_topic():
-    return 'topic69'
+    return 'jt-producer-3p'
