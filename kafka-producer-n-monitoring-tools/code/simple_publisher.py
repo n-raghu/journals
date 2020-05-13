@@ -1,7 +1,7 @@
 import sys
+import pickle
 from datetime import datetime as dtm
 
-from msgpack import packb
 from confluent_kafka import Producer
 
 from essentials import get_kafka_ins, get_topic
@@ -24,11 +24,7 @@ P = Producer(producer_cfg)
 for _i in range(5):
     P.produce(
         get_topic(),
-        value=packb(
-            gen_msg(_i),
-            default=encode_dtm,
-            use_bin_type=True,
-        ),
+        value=pickle.dumps(gen_msg(_i)),
         headers={
             'msg_version': 'v1',
         },
