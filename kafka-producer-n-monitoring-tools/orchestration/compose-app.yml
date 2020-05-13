@@ -1,0 +1,49 @@
+version: '3.6'
+
+networks: 
+    jti:
+        name: jtnet
+        ipam:
+          driver: default
+          config:
+            - subnet: 172.36.99.0/28
+
+services:
+  kafkaboard:
+    image: obsidiandynamics/kafdrop
+    hostname: kafboard
+    container_name: kafboard
+    depends_on:
+      - kafkabroker
+    ports:
+      - "9099:9000"
+    environment:
+      KAFKA_BROKERCONNECT: 172.36.99.9:9092
+    networks:
+      jti:
+        ipv4_address: 172.36.99.11
+
+  publisher:
+    image: jt-kafka-producer-monitoring
+    command: python waker.py
+    container_name: kon_publisher
+    hostname: host_publisher
+    volumes:
+        - /home/raghu.neerukonda/journals:/journals
+    networks:
+        jti:
+            ipv4_address: 172.36.99.6
+    build:
+        context: .
+        dockerfile: dfile
+
+  subscriber:
+    image: jt-kafka-producer-monitoring
+    command: python waker.py
+    container_name: kon_subscriber
+    hostname: host_subscriber
+    volumes:
+        - /home/raghu.neerukonda/journals:/journals
+    networks:
+        jti:
+            ipv4_address: 172.36.99.9
