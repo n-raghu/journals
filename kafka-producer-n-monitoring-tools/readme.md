@@ -4,7 +4,7 @@ This is continuation to the previous post - [Kafka - Playying with Consumer API]
 Here, I would like to play with Producer API to create message using third party tools like MessagePack for serialization and KafDrop for monitoring
 
 ### [MessagePack](https://msgpack.org/index.html)
-MessagePack is one of the best available schemaless IDL to 
+MessagePack is one of the best available schemaless IDL to interchange data between heterogenous systems. It is a binary for simple data structures and designed for efficient transmission over the wire.
 
 #### Code Snippets
 Example shows how to pack and unpack the common data types, to work with custom data types like datetime.datetime, check DateTime example
@@ -78,7 +78,7 @@ Note: Import or recreate "dtm_encode" function from the Code Snippet section
 
 def delivery_report(err, m):
     if err is not None:
-        print(f'Message delivery failed: {err}')
+        print(f'Message -{m}, delivery failed: {err}')
     else:
         print(f'Message delivered to {m.topic()} [{m.partition()}]')
 
