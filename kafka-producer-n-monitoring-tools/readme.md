@@ -1,19 +1,45 @@
 # KAFKA - PRODUCER API WITH THIRD PARTY TOOLS
 
-This is a continuation to the previous post - [Kafka - Playying with Consumer API](https://dev.to/nraghu/kafka-playing-with-consumer-api-using-python-library-3b50), where I covered some peculiar usecases of Consumer API.
+This is continuation to the previous post - [Kafka - Playying with Consumer API](https://dev.to/nraghu/kafka-playing-with-consumer-api-using-python-library-3b50), where I covered some peculiar usecases of Consumer API.
 Here, I would like to play with Producer API to create message using third party tools like MessagePack for serialization and KafDrop for monitoring
 
 ### [MessagePack](https://msgpack.org/index.html)
-MessagePack is one of the best available schemaless IDL which 
+MessagePack is one of the best available schemaless IDL to 
 
- - Skip compression to save time
- - Can use encryption AES-256 for messages in-transit
+#### Code Snippets
+Example shows how to pack and unpack the common data types, to work with custom data types like datetime.datetime, check DateTime example
 
-#### Code Snippet
+ - Simple Example
 ```python
 from msgpack import packb, unpackb
+
 data = {'a': 5}
 msg_packet = packb(data)
+
+recreated_data = unpackb(msg_packet)
+```
+
+ - Using Datetime
+```python
+from datetime import datetime as dtm
+from dateutil import parser
+
+def dtm_encode(obj):
+    if isinstance(obj, dtm):
+        return {
+            '__dtm__': True,
+            'obj_as_str': obj.isoformat()
+        }
+    return obj
+
+def dtm_decode(obj):
+    if '__dtm__' in obj:
+        return parser.isoparse(obj['obj_as_str'])
+    return obj
+
+dat = {'a':5, 'dates': {'created_at': dtm.now()}}
+serialized_dat = packb(dat, default=dtm_encode)
+deserialzed_dat = unpackb(serialized_dat, object_hook=dtm_decode)
 ```
 
 #### Why serialize the messages?
@@ -38,27 +64,47 @@ Kafdrop is an opensource web UI for viewing Kafka topics and browsing consumer g
 
 #### Example screen how a KafDrop looks like
 
-### Produce a Message
+### Produce a Message and see in Kafdrop
 ```python
 from datetime import datetime as dtm
 
 from msgpack import packb, unpackb
 from confluent_kafka import Producer
 
+'''
+Note: Import or recreate "dtm_encode" function from the Code Snippet section 
+'''
+
+
+def delivery_report(err, m):
+    if err is not None:
+        print(f'Message delivery failed: {err}')
+    else:
+        print(f'Message delivered to {m.topic()} [{m.partition()}]')
+
+
 producer_config = {
-    'bootstrap.server': '172.16.6.9'
+    'bootstrap.servers': '172.16.6.9'
 }
+producer_topic = 'raghu-producer-test'
 P = Producer(producer_config)
 data = {
     'a':5,
     'created_at': dtm.now()
 }
-data_packet = packb(data)
+data_packet = packb(data, default=dtm_encode, use_bin_type=True)
+
 P.produce(
-    jti_topic,
-    data_packet,
+    producer_topic,
+    value=data_packet,
+    callback=delivery_report,
 )
-P.poll()
+P.poll(0.01)
 ```
 
+#### Snapshot of Kafdrop
+
 ### Best Practices
+ - Skip compression to save time
+ - Can use encryption AES-256 for messages in-transit
+ - Headers
