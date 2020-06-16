@@ -1,6 +1,6 @@
 # KAFKA - PRODUCER API WITH THIRD PARTY TOOLS
 
-This is continuation to the previous post - [Kafka - Playying with Consumer API](https://dev.to/nraghu/kafka-playing-with-consumer-api-using-python-library-3b50), where I covered some peculiar usecases of Consumer API.
+This is a continuation write-up to the previous post - [Kafka - Playying with Consumer API](https://dev.to/nraghu/kafka-playing-with-consumer-api-using-python-library-3b50), where I covered some peculiar usecases of Consumer API.
 Here, I would like to play with Producer API to create message using third party tools like MessagePack for serialization and KafDrop for monitoring
 
 ### [MessagePack](https://msgpack.org/index.html)
@@ -47,15 +47,17 @@ Serialization is the process of transforming an object into a format that it can
 
 #### Schema-based and Schemaless IDL
 In Schema-based IDL, the primitives of the message are pre-defined where publishers and consumers can validate the message before working on it. By the name schemaless, it can have custom primitives for each and every message.
-If you're having a standard and rigid database schema, you might want to use Apache Avro which is a best fit and widely used in combination with Apache Kafka. In contrast, if you're working with schemaless or bigdata oriented systems where primitives are highly volatile, there is an overhead of maintaining the Avro schemas, where schemaless IDL comes into picture. Few schemaless IDL libraries available.
- - [JSON](www.json.org)
- - [UJSON](https://github.com/ultrajson/ultrajson)
- - [MessagePack](https://msgpack.org/index.html)
- - [BSON](http://bsonspec.org/)
- - [Pickle](https://docs.python.org/3.6/library/pickle.html)
+If you're having a standard and rigid database schema, you might want to use Apache Avro which is a best fit and widely used in combination with Apache Kafka. In contrast, if you're working with schemaless or bigdata oriented systems where primitives are highly volatile, there is an overhead of maintaining the Avro schemas, and the need of schemaless IDL arises. These are some of standard protocols most commonly chosen.
 
-I chose MessagePack among the list because it has an incredible performance and is super simple to setup and start working with and also much smalller and faster than simple JSON.
+| Protocol | Type |
+| -------- | -------- |
+| [Thrift](https://www.thrift.apache.org) | Schema Based |
+| [Avro](https://avro.apache.org) | Schema Based |
+| [JSON](www.json.org) | Schemaless |
+| [MessagePack](https://msgpack.org/index.html) | Schemaless|
+| [BSON](http://bsonspec.org/) | Schemaless |
 
+I chose MessagePack among the list because it has an incredible performance, super simple to setup and start working with, and also much smalller and faster than JSON.
 
 ### [KafDrop](https://github.com/obsidiandynamics/kafdrop)
 <p>
@@ -105,6 +107,9 @@ P.poll(0.01)
 #### Snapshot of Kafdrop
 
 ### Best Practices
- - Skip compression to save time
+Before we close, I would like to mention some of the best practices
+
+ - Compression reduces the packet size and helps to transmit much faster over network, it is an additional and a time consuming step to compress and decompress which made me to stay away, however, most standard workflows has compression/decompression which can be adopted very easily. **snappy** & **zlib** are most widely accepted libraries for compression.
+
  - Can use encryption AES-256 for messages in-transit
  - Headers
