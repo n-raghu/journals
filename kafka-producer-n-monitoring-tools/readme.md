@@ -43,7 +43,7 @@ deserialzed_dat = unpackb(serialized_dat, object_hook=dtm_decode)
 ```
 
 #### Why serialize the messages?
-Serialization is the process of transforming an object into a format that it can be stored, at the destination the data can be deserialized to recreate the original object. Since Kafka uses the filesystem to store the messages, we need to serialize and deserialize the data. There are two protocols to serialize a message either by using Schema-based IDL(Interface Definition Language) or using Schemaless. While you can find numerous articles on these protocols on the web, I have given a one-liner differentiating both the protocols
+Serialization is the process of transforming an object into a format that it can be stored, at the destination the data can be deserialized to recreate the original object. Since Kafka uses the filesystem to store the messages, we need to serialize and deserialize the data. There are two protocols to serialize a message either by using Schema-based IDL(Interface Definition Language) or using Schemaless. While you can find numerous articles touching these protocols on the web, I have constituted a one-liner differentiating them.
 
 #### Schemaless and Schema-based IDL
 In Schema-based IDL, the primitives of the message are pre-defined where publishers and consumers can validate the message before working on it. On the other hand, schemaless can have custom primitives for every message.
