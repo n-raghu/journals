@@ -67,6 +67,13 @@ Kafdrop is an opensource web UI for viewing Kafka topics and browsing consumer g
 
 #### Example screen how a KafDrop looks like
 
+#### Features
+ - List all topics of the cluster
+ - Option to browse through a partition data of a topic
+ - Tracks message offsets of all consumer groups subscribed to a topic
+ - Create & Delete topics
+ - Search and filter messages in a partition
+
 ### Produce a Message and see in Kafdrop
 ```python
 from datetime import datetime as dtm
@@ -104,6 +111,8 @@ P.produce(
 )
 P.poll(0.01)
 ```
+
+*Note: Refer code samples in my GitHub [repo](https://github.com/nraghu)
 
 #### Snapshot of Kafdrop
 
