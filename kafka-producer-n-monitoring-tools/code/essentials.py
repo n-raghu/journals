@@ -29,4 +29,4 @@ def get_kafka_ins():
 
 
 def get_topic():
-    return 'jt-producer-3p'
+    return 'raghu-producer-test'

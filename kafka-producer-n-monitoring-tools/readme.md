@@ -66,6 +66,13 @@ Kafdrop is an opensource web UI for viewing Kafka topics and browsing consumer g
 </p>
 
 #### Example screen how a KafDrop looks like
+ - Home Screen
+Home Screen not only covers the overview, but it also has information about the Brokers and topics available in the cluster
+
+
+ - Topic Page
+Reveals all partitions info of the topic and renders the list of consumer groups subscribed to the topic
+
 
 #### Features
  - List all topics of the cluster
@@ -112,9 +119,11 @@ P.produce(
 P.poll(0.01)
 ```
 
-*Note: Refer code samples in my GitHub [repo](https://github.com/nraghu)
+*Note: Refer code samples in my GitHub [repo](https://github.com/n-raghu/journals/tree/master/kafka-producer-n-monitoring-tools/code)*
 
 #### Snapshot of Kafdrop
+
+
 
 ### Best Practices
 Before we close, I would like to mention some of the best practices
