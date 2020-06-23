@@ -1,0 +1,9 @@
+FROM python:3.6.9
+
+RUN apt-get update
+RUN pip install --upgrade pip
+RUN mkdir /build
+ADD waker.py /build/
+ADD modules /build/
+WORKDIR /build
+RUN pip install -r modules
