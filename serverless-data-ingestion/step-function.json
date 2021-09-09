@@ -1,0 +1,45 @@
+{
+  "Comment": "Serverless Data Ingestion",
+  "StartAt": "ScanS3",
+  "States": {
+    "ScanS3": {
+      "Type": "Task",
+      "Next": "CheckResponse",
+      "Resource": "arn:aws:lambda:us-west-2:559148169530:function:readS3"
+    },
+    "CheckResponse":{
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.body.files[0]",
+          "IsPresent": false,
+          "Next": "SafeExit"
+        }
+        ],
+        "Default": "CreateIngestionList"
+    },
+    "SafeExit": {
+      "Type": "Succeed"
+    },
+    "CreateIngestionList": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-west-2:559148169530:function:zip_xplorer",
+      "Next": "BucketItemsMapper"
+    },
+    "BucketItemsMapper": {
+      "Type": "Map",
+      "End": true,
+      "ItemsPath": "$.body.files",
+      "Iterator": {
+        "StartAt": "DataIngestion",
+        "States": {
+          "DataIngestion": {
+            "Type": "Task",
+            "Resource": "arn:aws:lambda:us-west-2:559148169530:function:ingest_data",
+            "End": true
+          }
+        }
+      }
+    }
+  }
+}
